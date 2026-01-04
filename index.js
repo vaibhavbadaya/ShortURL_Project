@@ -2,13 +2,17 @@ const express = require('express');
 const PORT = 8001;
 const app = express();
 const {connectMongoDB} = require('./config');
-const urlRouter = require('./routes/url');
 const { URL } = require('./models/url');
 const path = require('path');
-const staticRouter = require('./routes/staticRouter');
 
+const userRouter = require('./routes/user');
+const staticRouter = require('./routes/staticRouter');
+const urlRouter = require('./routes/url');
+
+// Body parsers must be registered before route handlers that rely on `req.body`
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/user', userRouter);
 
 connectMongoDB('mongodb://localhost:27017/shorturldb')
     .then(() => console.log('Connected to MongoDB'))
